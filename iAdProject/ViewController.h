@@ -7,9 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <iAd/iAd.h>
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController <ADBannerViewDelegate>
 
+@property (weak, nonatomic) IBOutlet UILabel *lblTimerMessage;
+@property (weak, nonatomic) IBOutlet ADBannerView *adBanner;
 
 @end
 

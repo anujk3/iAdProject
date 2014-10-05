@@ -10,6 +10,10 @@
 
 @interface ViewController ()
 
+@property (nonatomic, strong) NSTimer *timer;
+@property (nonatomic) int secondsElapsed;
+@property (nonatomic) BOOL pauseTimeCounting;
+
 @end
 
 @implementation ViewController
@@ -19,6 +23,9 @@
     // Do any additional setup after loading the view, typically from a nib.
     self.adBanner.delegate = self;
     self.adBanner.alpha = 0.0;
+    
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(showTimerMessage) userInfo:nil repeats:YES];
+    self.secondsElapsed = 0;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -47,15 +54,27 @@
     }];
 }
 
+- (void)showTimerMessage{
+    if (!self.pauseTimeCounting) {
+        self.secondsElapsed++;
+        self.lblTimerMessage.text = [NSString stringWithFormat:@"You've been viewing this view for %d seconds", self.secondsElapsed];
+    }else{
+        self.lblTimerMessage.text = @"Paused to show ad...";
+    }
+}
 
 - (BOOL)bannerViewActionShouldBegin:(ADBannerView *)banner willLeaveApplication:(BOOL)willLeave {
     NSLog(@"Ad Banner action is about to begin.");
+    
+    self.pauseTimeCounting = YES;
     
     return YES;
 }
 
 - (void)bannerViewActionDidFinish:(ADBannerView *)banner{
     NSLog(@"Ad Banner action did finish");
+    
+    self.pauseTimeCounting = NO;
 
 }
 
